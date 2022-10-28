@@ -25,6 +25,7 @@ class ImageController extends GetxController{
   Future<bool>upload()async{
     _loading=true;
     update();
+    await Future.delayed(Duration(seconds: 3));
     bool success=false;
 
     http.StreamedResponse response=await UpdateProfile(pickedFile);
@@ -34,21 +35,24 @@ class ImageController extends GetxController{
     _loading=false;
 
 
+
     success=true;
 
     _imagePath=map["message"];
+    update();
   }
   else{
-
+_loading=false;
+update();
   }
   update();
     return success;
   }
-  Future<http.StreamedResponse>UpdateProfile(PickedFile?data)async{
+  Future<http.StreamedResponse>UpdateProfile(PickedFile? data)async{
     http.MultipartRequest request =http.MultipartRequest('POST', Uri.parse('https://aws143.arnavgoyal4.repl.co/upload'));
     if(GetPlatform.isMobile && data!=null){
 
-      File _file=File(data.path);
+      // File _file=File(data.path);
       request.files.add(await http.MultipartFile.fromPath("files[]", data.path));
         // ('image', _file.readAsBytes().asStream(), _file.lengthSync(), filename: _file.path.split('/').last)
 

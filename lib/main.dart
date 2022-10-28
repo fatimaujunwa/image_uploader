@@ -1,14 +1,16 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_uploader/custom_snack_bar.dart';
+import 'package:image_uploader/widgets/black_container.dart';
+import 'package:image_uploader/widgets/custom_snack_bar.dart';
 import 'dart:io';
 
-import 'package:image_uploader/image_controller.dart';
-import 'package:image_uploader/text_dimensions.dart';
-import 'package:image_uploader/themes.dart';
+import 'package:image_uploader/controllers/image_controller.dart';
+import 'package:image_uploader/utils/text_dimensions.dart';
+import 'package:image_uploader/utils/themes.dart';
 
 void main() {
 
@@ -38,102 +40,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  late File image;
-  PickedFile? pickedFile;
-  final _picker = ImagePicker();
-
-  Future<void> _pickImage() async {
-    pickedFile = await _picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        image = File(pickedFile!.path);
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Get.find<ImageController>().upload();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: GetBuilder<ImageController>(
-      builder: (imageController) {
-        return SafeArea(
-            child: Padding(
-          padding: EdgeInsets.all(35),
-          child: Column(
-            children: [
-              Center(
-                child: GestureDetector(
-                  onTap: () => imageController.pickImage(),
-                  child: Text('Select an Image'),
-                ),
-              ),
-              SizedBox(
-                height: 35.h,
-              ),
-              Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 200,
-                  color: Colors.grey.withOpacity(0.6),
-                  child: pickedFile != null
-                      ? Image.file(
-                          File(imageController.pickedFile!.path),
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        )
-                      : Container()),
-              SizedBox(
-                height: 35.h,
-              ),
-              Center(
-                child: GestureDetector(
-
-                  onTap: () => imageController.upload().then((value) {
-
-                  }),
-                  child: Text('Upload Server'),
-                ),
-              ),
-              Text(imageController.imagePath.toString()),
-              SizedBox(
-                height: 45,
-              ),
-              Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 200,
-                  color: Colors.grey.withOpacity(0.6),
-                  child: imageController.imagePath != null
-                      ? Image.file(
-                          File(imageController.pickedFile!.path),
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        )
-                      : Container()),
-            ],
-          ),
-        ));
-      },
-    ));
-  }
-}
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -142,8 +48,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool _switchValue=true;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
 
@@ -151,6 +59,7 @@ class _HomeState extends State<Home> {
       builder: (controller) {
         return Column(
           children: [
+
             Stack(
               children: [
                 Container(
@@ -161,21 +70,7 @@ class _HomeState extends State<Home> {
                   height: 750.h,
                   width: 500.w,
                 ),
-                Container(
-                  height: 147.h,
-                  width: 320.w,
-                  margin: EdgeInsets.only(left: 20.w, top: 20.h),
-                  child: Row(
-                    children: [
-                      Text('U', style: TextDimension.style1),
-                      SizedBox(
-                        width: 80.w,
-                      ),
-                      Text('o', style: TextDimension.style1),
-                      Text('a', style: TextDimension.style1),
-                    ],
-                  ),
-                ),
+
                 Positioned(
                     top: 130.h,
                     child: Container(
@@ -225,7 +120,7 @@ class _HomeState extends State<Home> {
                                           Icon(
                                             Icons.image,
                                             color: Colors.grey.withOpacity(0.5),
-                                            size: 70,
+                                            size: 70.h,
                                           ),
                                           Text(
                                             'Click to select image',
@@ -240,25 +135,38 @@ class _HomeState extends State<Home> {
                 Positioned(
                     // left: Dimensions.width56,
                     child: Container(
-                  height: 147.h,
-                  width: 320.w,
-                  margin: EdgeInsets.only(left: 80.w, top: 20.h),
+
+                  height: 200.h,
+                  width: 400.w,
+                  margin: EdgeInsets.only(left: 50.w, top: 20.h),
                   child: Row(
                     children: [
                       Text(
-                        "p",
-                        style: TextDimension.style1,
+                        "U",
+                        style: TextDimension.style1.copyWith(color: Theme.of(context).dividerColor),
                       ),
                       Text(
-                        "l",
-                        style: TextDimension.style1,
+                        "p",
+                        style: TextDimension.style1.copyWith(color: Theme.of(context).dividerColor),
                       ),
-                      SizedBox(
-                        width: 120.w,
+                      // SizedBox(
+                      //   width: 120.w,
+                      // ),
+                      Text(
+                        "l",
+                        style: TextDimension.style1.copyWith(color: Theme.of(context).dividerColor),
+                      ),
+                      Text(
+                        "o",
+                        style: TextDimension.style1.copyWith(color: Theme.of(context).dividerColor),
+                      ),
+                      Text(
+                        "a",
+                        style: TextDimension.style1.copyWith(color: Theme.of(context).dividerColor),
                       ),
                       Text(
                         "d",
-                        style: TextDimension.style1,
+                        style: TextDimension.style1.copyWith(color: Theme.of(context).dividerColor),
                       ),
                     ],
                   ),
@@ -273,45 +181,33 @@ class _HomeState extends State<Home> {
                     print(controller.loading);
                     showCustomSnackBar(controller.imagePath!, "image upload");
                   }
+                  else{
+                    showCustomSnackBar("Unfortunately we were unable to upload your image, please try again", "image upload");
+                  }
                 });
                 print(controller.imagePath);
               },
 
-              child: Container(
-                height: 41.h,
-                width: 300.w,
-                margin: EdgeInsets.only(top: 20.h),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Color(0xff121215),
-                      Color(0xff1c1c21),
-                    ], begin: Alignment.center, end: Alignment.bottomLeft),
-                    borderRadius: BorderRadius.circular(8.r)),
-                child: Center(
-                    child: Text(
-                  'Upload To Server',
-                  style: TextDimension.style2,
-                )),
-              ),
+              child:controller.loading==true?CircularProgressIndicator(color: Colors.black,):
+              BlackContainer(),
             ),
-            GestureDetector(
-              onTap: (){
-
-          Get.changeThemeMode(Get.isDarkMode?ThemeMode.dark:ThemeMode.light);
+            SizedBox(height: 10.h,),
+            CupertinoSwitch(
+              value: _switchValue,
+              activeColor: Colors.black,
+              onChanged: (value) {
+                setState(() {
+                  _switchValue = value;
+                  Get.changeThemeMode(Get.isDarkMode? ThemeMode.light:ThemeMode.dark);
+                });
               },
-
-              child: Container(
-               child: MaterialButton(onPressed: (){
-                 Get.changeThemeMode(Get.isDarkMode? ThemeMode.light:ThemeMode.dark);
-               },
-               child: Text('change theme'),
-               ),
-
-              ),
             ),
+
           ],
         );
       },
     ));
   }
 }
+
+
